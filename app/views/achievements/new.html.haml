@@ -1,5 +1,5 @@
 %h1 New Achievement
-= simple_form_for @achievement do |f|
+= simple_form_for @achievement ||= Achievement.new do |f|
   = f.input :title
   = f.input :tescription
   = f.input :privacy, collection: Hash[Achievement.privacies.map{|key, value| [key.split('_').first.capitalize, key]}]

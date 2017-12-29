@@ -1,4 +1,5 @@
 class AchievementsController < ApplicationController
+  
   def new
     @achievement = Achievement.new
   end
@@ -8,7 +9,7 @@ class AchievementsController < ApplicationController
     if achievement.save
       redirect_to root_url, notice: 'Achievement has been created'
     else
-      render 'new'
+      redirect_to new_achievement_path, notice: "can't be blank"
     end
   end
 

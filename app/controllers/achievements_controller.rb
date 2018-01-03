@@ -1,7 +1,11 @@
 class AchievementsController < ApplicationController
-  
   def new
     @achievement = Achievement.new
+  end
+
+  def show
+    @achievement = Achievement.find(params[:id])
+    @tescription = Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(@achievement.tescription)
   end
 
   def create
@@ -15,12 +19,11 @@ class AchievementsController < ApplicationController
 
   private
 
-    def achievement_params
-      params.require(:achievement).permit(:title,
-                                          :tescription,
-                                          :privacy,
-                                          :featured,
-                                          :cover_image)
-    end
-
+  def achievement_params
+    params.require(:achievement).permit(:title,
+                                        :tescription,
+                                        :privacy,
+                                        :featured,
+                                        :cover_image)
+  end
 end

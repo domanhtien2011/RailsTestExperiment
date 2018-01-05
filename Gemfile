@@ -64,7 +64,8 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem 'awesome_print'
 gem 'bootstrap-sass'
+gem 'devise'
+gem 'faker'
 gem 'hamlit'
 gem 'redcarpet'
 gem 'simple_form'
-gem 'devise'

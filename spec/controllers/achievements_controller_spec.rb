@@ -1,6 +1,48 @@
 require 'rails_helper'
 
 describe AchievementsController do
+  describe 'guest user' do
+    describe 'GET index' do
+      it 'renders :index template' do
+        get :index
+        expect(response).to render_template(:index)
+      end
+
+      it 'assigns only public achievements to template' do
+        public_achievement = FactoryBot.create(:public_achievement)
+        private_achievement = FactoryBot.create(:private_achievement)
+        get :index
+        expect(assigns(:achievements)).to match_array([public_achievement])
+      end
+    end
+
+    describe 'GET show' do
+      let(:achievement) { FactoryBot.create(:public_achievement) }
+
+      it 'renders :show template' do
+        get :show, params: { id: achievement.id }
+        expect(response).to render_template(:show)
+      end
+
+      it 'assigns requested achievement to @achievement' do
+        get :show, params: { id: achievement.id }
+        expect(assigns(:achievement)).to eq(achievement)
+      end
+    end
+
+    describe 'GET new' do
+      it 'redirects new user to login page' do
+        get :new
+        # the below route is provided by devise gem which is already included in the rails_helper.rb file
+        expect(response).to redirect_to 'http://test.host/users/sign_in'
+      end
+    end
+
+    describe 'POST create' do
+      
+    end
+  end
+
   describe 'DELETE destroy' do
     let(:achievement) { FactoryBot.create(:public_achievement) }
     it 'redirects to achievement#index' do
@@ -37,20 +79,6 @@ describe AchievementsController do
     end
   end
 
-  describe 'GET index' do
-    it 'renders :index template' do
-      get :index
-      expect(response).to render_template(:index)
-    end
-
-    it 'assigns only public achievements to template' do
-      public_achievement = FactoryBot.create(:public_achievement)
-      private_achievement = FactoryBot.create(:private_achievement)
-      get :index
-      expect(assigns(:achievements)).to match_array([public_achievement])
-    end
-  end
-
   describe 'GET edit' do
     let(:achievement) { FactoryBot.create(:public_achievement) }
     it 'renders :edit template' do
@@ -60,31 +88,6 @@ describe AchievementsController do
 
     it 'assigns the requested achievement to template' do
       get :edit, params: { id: achievement }
-      expect(assigns(:achievement)).to eq(achievement)
-    end
-  end
-
-  describe 'GET new' do
-    it 'renders :new template' do
-      get :new
-      expect(response).to render_template(:new)
-    end
-    it 'assigns new Achievement to @achievement' do
-      get :new
-      expect(assigns(:achievement)).to be_a_new(Achievement)
-    end
-  end
-
-  describe 'GET show' do
-    let(:achievement) { FactoryBot.create(:public_achievement) }
-
-    it 'renders :show template' do
-      get :show, params: { id: achievement.id }
-      expect(response).to render_template(:show)
-    end
-
-    it 'assigns requested achievement to @achievement' do
-      get :show, params: { id: achievement.id }
       expect(assigns(:achievement)).to eq(achievement)
     end
   end

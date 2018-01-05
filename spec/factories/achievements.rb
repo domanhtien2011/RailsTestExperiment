@@ -1,13 +1,16 @@
 FactoryBot.define do
   factory :achievement do
-    sequence(:title) {|n| "Achievement_#{n}"}
+    sequence(:title) { |n| "Achievement_#{n}" }
     tescription 'Nobody can stop me!!!'
-    privacy Achievement.privacies[:private_access]
     featured false
     conver_image 'ahihi...'
 
     factory :public_achievement do
-      privacy Achievement.privacies[:public_access]
+      privacy :public_access
+    end
+
+    factory :private_achievement do
+      privacy :private_access
     end
   end
 end

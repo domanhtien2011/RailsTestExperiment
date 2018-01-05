@@ -1,5 +1,14 @@
 class AchievementsController < ApplicationController
-  before_action :authenticate_user!, only: [:new]
+  before_action :authenticate_user!,
+                only: %i[new
+                         create
+                         edit
+                         update
+                         destroy]
+  before_action :owners_only,
+                only: %i[edit
+                         update
+                         destroy]
 
   def index
     @achievements = Achievement.public_access
@@ -13,29 +22,27 @@ class AchievementsController < ApplicationController
     @achievement = Achievement.find(params[:id])
   end
 
-  def edit
-    @achievement = Achievement.find(params[:id])
-  end
+  def edit; end
 
   def update
-    @achievement = Achievement.find(params[:id])
-    if @achievement.update_attributes(achievement_params)
-      redirect_to achievement_path(@achievement)
-    end
+    redirect_to achievement_path(@achievement) if
+    @achievement
+    .update_attributes(achievement_params)
   end
 
   def create
-    achievement = Achievement.new(achievement_params)
+    achievement = Achievement.new(achievement_params
+    .merge(user: current_user))
     if achievement.save
-      redirect_to achievement_path(achievement.id), notice: 'Achievement has been created'
+      redirect_to achievement_path(achievement.id),
+                  notice: 'Achievement has been created'
     else
-      redirect_to new_achievement_path, notice: "can't be blank"
+      redirect_to new_achievement_path, notice: achievement.errors.to_s
     end
   end
 
   def destroy
-    achievement = Achievement.find(params[:id])
-    redirect_to achievements_path if achievement.destroy
+    redirect_to achievements_path if @achievement.destroy
   end
 
   private
@@ -46,5 +53,10 @@ class AchievementsController < ApplicationController
                                         :privacy,
                                         :featured,
                                         :cover_image)
+  end
+
+  def owners_only
+    @achievement = Achievement.find(params[:id])
+    redirect_to achievements_path if current_user != @achievement.user
   end
 end

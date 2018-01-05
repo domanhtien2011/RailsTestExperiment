@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :achievement do
     sequence(:title) { |n| "Achievement_#{n}" }
-    tescription 'Nobody can stop me!!!'
+    tescription 'I am the smartest and toughest warrior in the history of human beings...'
     featured false
-    conver_image 'ahihi...'
+    conver_image 'cover_image.png'
 
     factory :public_achievement do
       privacy :public_access

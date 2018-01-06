@@ -31,13 +31,14 @@ class AchievementsController < ApplicationController
   end
 
   def create
-    achievement = Achievement.new(achievement_params
+    @achievement = Achievement.new(achievement_params
     .merge(user: current_user))
-    if achievement.save
-      redirect_to achievement_path(achievement.id),
+    if @achievement.save
+      redirect_to achievement_path(@achievement.id),
                   notice: 'Achievement has been created'
     else
-      redirect_to new_achievement_path, notice: achievement.errors.to_s
+      redirect_to new_achievement_path,
+                  notice: @achievement.errors.full_messages
     end
   end
 

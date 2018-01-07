@@ -24,6 +24,8 @@ class Achievement < ApplicationRecord
     includes(:user).where('title LIKE ?', "#{letter}%").order('users.email')
   end
 
+  def self.get_public_achievements; end
+
   # private
 
   # def unique_title_for_one_user

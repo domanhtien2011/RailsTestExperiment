@@ -11,7 +11,7 @@ class AchievementsController < ApplicationController
                          destroy]
 
   def index
-    @achievements = Achievement.public_access
+    @achievements = Achievement.get_public_achievements
   end
 
   def new
@@ -31,15 +31,11 @@ class AchievementsController < ApplicationController
   end
 
   def create
-    @achievement = Achievement.new(achievement_params
-    .merge(user: current_user))
-    if @achievement.save
-      redirect_to achievement_path(@achievement.id),
-                  notice: 'Achievement has been created'
-    else
-      redirect_to new_achievement_path,
-                  notice: @achievement.errors.full_messages
-    end
+    # Can't just call new method normally cuz this is Rspec mock,
+    # I need to allow the CreateAchievement class
+    # to receive the new method.
+    service = CreateAchievement.new(achievement_params.to_h, current_user)
+    service.create
   end
 
   def destroy
